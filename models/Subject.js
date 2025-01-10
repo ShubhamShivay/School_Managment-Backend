@@ -24,4 +24,8 @@ const subjectSchema = new Schema({
       ref: "User",
     },
   ],
+},{
+  timestamps: true,
 });
+
+export default mongoose.model("Subject", subjectSchema);

@@ -1,9 +1,9 @@
-import User from "../model/User.js";
+import User from "../models/User.js";
 
 export const isAdmin = async (req, res, next) => {
   //! Find the login user
-  console.log(req.userAuthId);
-  const user = await User.findById(req.userAuthId._id);
+  console.log("userAuthId", req.userAuthId._id);
+  const user = await User.findById(req.userAuthId?._id);
   console.log("user", user);
   //! Check user if Admin?
   if (!user.isAdmin) {

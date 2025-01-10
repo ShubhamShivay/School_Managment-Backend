@@ -58,10 +58,7 @@ export const studentLogin = expressAsyncHandler(async (req, res) => {
     status: "success",
     message: "User logged in successfully",
     student,
-    token: generateToken({
-      _id: student._id,
-      role: student.role,
-    }),
+    token: generateToken({ _id: student?._id, role: student?.role }),
   });
 });
 
@@ -70,8 +67,8 @@ export const studentLogin = expressAsyncHandler(async (req, res) => {
 //! @access Private/Admin
 
 export const getStudent = expressAsyncHandler(async (req, res) => {
-  const student = await Student.findById(req.params.id);
-  
+  const student = await Student.findById(req.userAuthId._id);
+
   res.json({
     status: "success",
     message: "Student fetched successfully",

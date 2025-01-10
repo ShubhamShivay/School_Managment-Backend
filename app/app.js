@@ -7,6 +7,7 @@ import {
   notFound,
 } from "../middleware/globalErrorHandler.js";
 import studentRoute from "../routes/studentRoute.js";
+import bookRoute from "../routes/booksRoute.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 //! Routes
 app.use("/api/users", userRoute);
 app.use("/api/students", studentRoute);
+app.use("/api/books", bookRoute);
 
 //! Error handler
 app.use(notFound);

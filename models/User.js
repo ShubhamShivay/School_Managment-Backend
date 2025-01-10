@@ -1,14 +1,9 @@
-import e from "express";
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    // id: {
-    //   type: String,
-    //   required: true,
-    // },
     fname: {
       type: String,
       required: true,
@@ -25,6 +20,10 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
     role: {
       type: String,

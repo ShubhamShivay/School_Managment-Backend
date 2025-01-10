@@ -4,10 +4,10 @@ import { verifyToken } from "../utils/verifyToken.js";
 export const isLoggedIn = (req, res, next) => {
   // Get token from hader
   const token = getTokenFromHeader(req);
-  console.log(token);
+  // console.log("Token" + " " + token);
   // Verify the token
   const decodedUser = verifyToken(token);
-  console.log(decodedUser);
+  // console.log("Decoded User" + decodedUser);
   // Save the user into req obj
   if (!decodedUser) {
     // console.log("Token Expired/Invalid");

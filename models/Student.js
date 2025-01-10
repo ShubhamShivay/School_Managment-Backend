@@ -25,6 +25,10 @@ const studentSchema = new Schema(
       enum: ["student"],
       default: "student",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     userId: {
       type: String,
       // required: true,
