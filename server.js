@@ -1,6 +1,5 @@
 import http from "http";
 import mongoose from "mongoose";
-import userRoute from "./routes/userRoute.js";
 import app from "./app/app.js";
 
 

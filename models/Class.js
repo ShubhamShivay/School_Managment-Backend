@@ -4,31 +4,21 @@ const Schema = mongoose.Schema;
 
 const classSchema = new Schema(
   {
-    name: {
+    className: {
       type: String,
       required: true,
+      unique: true,
     },
-    description: {
-      type: String,
-      required: true,
+    school: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "School",
     },
-    image: {
-      type: String,
-    },
-    classTeacher: {
-      type: Schema.Types.ObjectId,
-      ref: "Teacher",
-    },
-    students: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Student",
-      },
-    ],
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model("Class", classSchema);
+const Class = mongoose.model("Class", classSchema);
+
+export default Class;

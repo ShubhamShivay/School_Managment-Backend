@@ -8,35 +8,26 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
+
     lname: {
       type: String,
       required: true,
     },
     email: {
       type: String,
-      required: true,
+      // required: true,
     },
     password: {
       type: String,
       required: true,
     },
-    role: {
-      type: String,
-      enum: ["student"],
-      default: "student",
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    userId: {
-      type: String,
-      // required: true,
-    },
-    status: {
-      type: String,
-      enum: ["active", "inactive"],
-      default: "active",
+    class: {
+      type: Schema.Types.ObjectId,
+      ref: "Class",
     },
     subjects: [
       {
@@ -44,24 +35,12 @@ const studentSchema = new Schema(
         ref: "Subject",
       },
     ],
-    fatherName: {
-      type: String,
-    },
-    motherName: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    image: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
+    books: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Book",
+      },
+    ],
   },
   {
     timestamps: true,

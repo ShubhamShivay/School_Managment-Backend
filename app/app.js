@@ -1,13 +1,14 @@
 import "dotenv/config";
 import express from "express";
 import connectDB from "../config/dbConnect.js";
-import userRoute from "../routes/userRoute.js";
 import {
   globalErrorHandler,
   notFound,
 } from "../middleware/globalErrorHandler.js";
 import studentRoute from "../routes/studentRoute.js";
 import bookRoute from "../routes/booksRoute.js";
+import adminRoute from "../routes/adminRoute.js";
+import classRoute from "../routes/classRoute.js";
 
 const app = express();
 
@@ -17,9 +18,10 @@ connectDB();
 app.use(express.json());
 
 //! Routes
-app.use("/api/users", userRoute);
+app.use("/api/admins", adminRoute);
 app.use("/api/students", studentRoute);
 app.use("/api/books", bookRoute);
+app.use("/api/classes", classRoute);
 
 //! Error handler
 app.use(notFound);
