@@ -7,8 +7,10 @@ import Subject from "../models/Subject.js";
 import Student from "../models/Student.js";
 import generateToken from "../utils/generateToken.js";
 
+
+//corrected documentations , note to fix other places to
 //? @desc Create Admin
-//? @route POST /api/admins
+//? @route POST /api/admins - wrong,  /api/admins/register - correct path 
 //? @access Private
 
 export const adminRegistration = expressAsyncHandler(async (req, res) => {
