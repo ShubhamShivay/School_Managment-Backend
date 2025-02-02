@@ -2,14 +2,22 @@ import { getTokenFromHeader } from "../utils/getTokenFromHeader.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 export const isLoggedIn = (req, res, next) => {
-	// Get token from hader
-	const token = getTokenFromHeader(req);
-	// Verify the token
-	const decodedUser = verifyToken(token);
-	// Save the user into req obj
+
+	const token = getTokenFromHeader(req); // Get token from hader
+
+	if (!token) {
+		return res.json({
+			status: 401,
+			message: "No token found",
+		});
+	}
+
+	const decodedUser = verifyToken(token); // verify if there is token
 	if (!decodedUser) {
-		// console.log("Token Expired/Invalid");
-		throw new Error("Token expired, Please login again");
+		return res.json({
+			status: 401,
+			message: "ERROR AUTHENTICATING",
+		});
 	} else {
 		req.user = decodedUser?.payload;
 		next();
