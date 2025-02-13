@@ -9,11 +9,10 @@ import jwt from "jsonwebtoken";
  * @param {string} _id - The user's _id
  * @returns {string} The generated JWT token
  */
-const generateToken = (_id) => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, {
+const generateToken = (user) => {
+  return jwt.sign({ user }, process.env.JWT_SECRET, {
     expiresIn: "3d",
   });
 };
-
 
 export default generateToken;

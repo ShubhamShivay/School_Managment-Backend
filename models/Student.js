@@ -13,7 +13,7 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
-    email: {
+    username: {
       type: String,
       // required: true,
     },
@@ -21,24 +21,66 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    email: {
+      type: String,
+    },
+    rollNumber: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: "student",
+    },
+    school: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "admin",
+      required: true,
     },
     class: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.String,
+      required: true,
       ref: "Class",
     },
-    subjects: [
+    examResult: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Subject",
+        subName: {
+          type: mongoose.Schema.Types.String,
+          required: true,
+          ref: "Subject",
+        },
+        subCode: {
+          type: mongoose.Schema.Types.String,
+          required: true,
+          ref: "Subject",
+        },
+        marksObtained: {
+          type: Number,
+          default: 0,
+        },
       },
     ],
-    books: [
+    attendance: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Book",
+        subName: {
+          type: mongoose.Schema.Types.String,
+          required: true,
+          ref: "Subject",
+        },
+        subCode: {
+          type: mongoose.Schema.Types.String,
+          required: true,
+          ref: "Subject",
+        },
+        status: {
+          type: String,
+          required: true,
+          enum: ["Present", "Absent"],
+        },
+        date: {
+          type: Date,
+          required: true,
+        },
       },
     ],
   },

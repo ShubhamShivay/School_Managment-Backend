@@ -1,17 +1,18 @@
 import express from "express";
 import {
-  studentLogin,
   studentRegistration,
-  studentLogout,
-  getStudent,
+  studentLogin,
+  getAllStudents,
+  updateStudent,
 } from "../controllers/studentCtrl.js";
 import { isLoggedIn } from "../middleware/isLoggedIn.js";
+import { isAdmin } from "../middleware/isAdmin.js";
 
 const studentRoute = express.Router();
 
-studentRoute.post("/register", studentRegistration);
+studentRoute.post("/register", isLoggedIn, isAdmin, studentRegistration);
 studentRoute.post("/login", studentLogin);
-studentRoute.get("/profile", isLoggedIn, getStudent);
-studentRoute.post("/logout", studentLogout);
+studentRoute.get("/all", isLoggedIn, isAdmin, getAllStudents);
+studentRoute.put("/update-by-admin", isLoggedIn, isAdmin, updateStudent);
 
 export default studentRoute;

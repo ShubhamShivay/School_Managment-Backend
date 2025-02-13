@@ -1,16 +1,34 @@
-import Admin from "../models/Admin.js";
+import { getTokenFromHeader } from "../utils/getTokenFromHeader.js";
+import { verifyToken } from "../utils/verifyToken.js";
 
-export const isAdmin = async (req, res, next) => {
-  //! Find the login user
-  // console.log("userAuthId", req.userAuthId._id);
-  const admin = await Admin.findById(req.userAuthId?._id);
-  console.log("user", admin);
-  //! Check user if Admin?
-  // if (!admin.role === "Admin") {
-  //   return res.status(401).json({
-  //     status: "Failed",
-  //     message: "Unauthorized, Access Denied, Admin only",
-  //   });
-  // }
-  return next();
+export const isAdmin = (req, res, next) => {
+  const token = getTokenFromHeader(req); // Get token from hader
+
+  if (!token) {
+    return res.json({
+      status: 401,
+      message: "No token found",
+    });
+  }
+
+  const decodedUser = verifyToken(token); // verify if there is token
+  // console.log("user", decodedUser?.role);
+  // console.log(decodedUser.user);
+  if (!decodedUser) {
+    return res.json({
+      status: 401,
+      message: "ERROR AUTHENTICATING",
+    });
+  } else {
+    if (decodedUser?.user?.role !== "Admin") {
+      return res.json({
+        status: 401,
+        message: "User is not an admin",
+        role: decodedUser?.payload?.role,
+      });
+    } else {
+      req.user = decodedUser?.user;
+      next();
+    }
+  }
 };

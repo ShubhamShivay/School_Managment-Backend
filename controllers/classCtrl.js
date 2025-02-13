@@ -8,26 +8,41 @@ import expressAsyncHandler from "express-async-handler";
 export const createClass = expressAsyncHandler(async (req, res) => {
   const { className, school } = req.body;
 
-  //   const classs = await Class.create({
-  //     className: className.toLowerCase(),
-  //     school: school,
-  //   });
+  // Check if class already exists
+  const classExists = await Class.findOne({
+    className: className.toLowerCase(),
+  });
+  if (classExists) {
+    res.status(400);
+    throw new Error("Class already exists");
+  }
+
+  // Create class
+  const classs = await Class.create({
+    className: className.toLowerCase(),
+    // school: school.toLowerCase(),
+  });
 
   res.json({
     status: "success",
     message: "Class created successfully",
-    // classs,
+    classs,
   });
 });
 
 //! @desc Get Class
-//! @route GET /api/classes/:id
+//! @route GET /api/classes/get
 //! @access Private/Admin
 
 export const getClass = expressAsyncHandler(async (req, res) => {
-  const classs = await Class.findById(req.params.id);
+  // Find class by Name
+  const classs = await Class.find({
+    className: req.body.className.toLowerCase(),
+  });
 
-  if (!classs) {
+  // console.log("classs", classs);
+
+  if (!classs || classs === null || classs.length === 0) {
     res.status(404);
     throw new Error("Class not found");
   }
@@ -39,12 +54,33 @@ export const getClass = expressAsyncHandler(async (req, res) => {
   });
 });
 
+//! @desc Get All Classes
+//! @route GET /api/classes
+//! @access Private/Admin
+
+export const getAllClasses = expressAsyncHandler(async (req, res) => {
+  // Find class by Name
+  const classes = await Class.find();
+
+  if (!classes || classes === null || classes.length === 0) {
+    res.status(404);
+    throw new Error("Class not found");
+  }
+
+  res.json({
+    status: "Success",
+    message: "All classes found successfully",
+    classes,
+  });
+});
+
 //! @desc Update Class
 //! @route PUT /api/classes/:id
 //! @access Private/Admin
 
 export const updateClass = expressAsyncHandler(async (req, res) => {
-  const classs = await Class.findById(req.params.id);
+  // Find class by Name
+  const classs = await Class.findById(req.body.className.toLowerCase());
 
   if (!classs) {
     res.status(404);

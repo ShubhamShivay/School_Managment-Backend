@@ -30,10 +30,15 @@ const classSchema = new Schema(
       required: true,
       ref: "Admin",
     },
-    class: {
+    teachersubject: {
+      type: Schema.Types.ObjectId,
+      ref: "subject",
+    },
+    teacherClass: {
       type: Schema.Types.ObjectId,
       ref: "Class",
     },
+
     description: {
       type: String,
       required: true,
@@ -41,14 +46,18 @@ const classSchema = new Schema(
     image: {
       type: String,
     },
-    teacher: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    students: [
+    attendence: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        date: {
+          type: Date,
+          required: true,
+        },
+        presentCount: {
+          type: Number,
+        },
+        absentCount: {
+          type: Number,
+        },
       },
     ],
   },

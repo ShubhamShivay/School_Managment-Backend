@@ -7,10 +7,9 @@ import Subject from "../models/Subject.js";
 import Student from "../models/Student.js";
 import generateToken from "../utils/generateToken.js";
 
-
 //corrected documentations , note to fix other places to
 //? @desc Create Admin
-//? @route POST /api/admins - wrong,  /api/admins/register - correct path 
+//? @route POST /api/admins - wrong,  /api/admins/register - correct path
 //? @access Private
 
 export const adminRegistration = expressAsyncHandler(async (req, res) => {
@@ -47,9 +46,9 @@ export const adminRegistration = expressAsyncHandler(async (req, res) => {
   });
 });
 
-//? @desc Login Admin
-//? @route GET /api/admins/:id
-//? @access Private/Admin
+//! @desc Login Admin
+//! @route GET /api/admins/login
+//! @access Private/Admin
 
 export const adminLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -79,16 +78,20 @@ export const adminLogin = expressAsyncHandler(async (req, res) => {
     status: "success",
     message: "User logged in successfully",
     admin,
-    token: generateToken({ _id: admin?._id, role: admin?.role }),
+    token: generateToken({
+      _id: admin?._id,
+      role: admin?.role,
+      schoolName: admin?.schoolName,
+    }),
   });
 });
 
 //? @desc Get Admin
-//? @route GET /api/admins/:id
+//? @route GET /api/admins/profile
 //? @access Private/Admin
 
 export const getAdmin = expressAsyncHandler(async (req, res) => {
-  const admin = await Admin.findById(req.userAuthId?._id);
+  const admin = await Admin.findById(req.user?._id);
 
   if (!admin) {
     res.status(404);
@@ -113,18 +116,9 @@ export const getAdmin = expressAsyncHandler(async (req, res) => {
 //? @access Private/Admin
 
 export const updateAdmin = expressAsyncHandler(async (req, res) => {
-  const admin = await Admin.findById(req.userAuthId?._id);
-
-  if (!admin) {
-    res.status(404);
-    throw new Error("Admin not found");
-  }
-
-  const updatedAdmin = await Admin.findByIdAndUpdate(
-    req.userAuthId?._id,
-    req.body,
-    { new: true }
-  );
+  const updatedAdmin = await Admin.findByIdAndUpdate(req.user?._id, req.body, {
+    new: true,
+  });
 
   res.json({
     status: "success",

@@ -15,7 +15,7 @@ const app = express();
 connectDB();
 
 //! Pass incoming data to JSON
-app.use(express.json());
+app.use(express.json()); // Middleware to parse incoming JSON data
 
 //! Routes
 app.use("/api/admins", adminRoute);
