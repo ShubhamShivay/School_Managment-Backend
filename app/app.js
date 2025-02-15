@@ -9,6 +9,8 @@ import studentRoute from "../routes/studentRoute.js";
 import bookRoute from "../routes/booksRoute.js";
 import adminRoute from "../routes/adminRoute.js";
 import classRoute from "../routes/classRoute.js";
+import subRoute from "../routes/subRoute.js";
+import teacherRoute from "../routes/teacherRoute.js";
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use("/api/admins", adminRoute);
 app.use("/api/students", studentRoute);
 app.use("/api/books", bookRoute);
 app.use("/api/classes", classRoute);
+app.use("/api/subjects", subRoute);
+app.use("/api/teachers", teacherRoute);
 
 //! Error handler
 app.use(notFound);

@@ -12,15 +12,6 @@ const subjectSchema = new Schema(
       type: String,
       required: true,
     },
-    session: {
-      type: String,
-      required: true,
-    },
-    className: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Class",
-      required: true,
-    },
     school: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "admin",
@@ -28,6 +19,7 @@ const subjectSchema = new Schema(
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Teacher",
+      required: true,
     },
   },
   {

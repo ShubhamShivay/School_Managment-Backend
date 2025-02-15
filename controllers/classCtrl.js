@@ -1,4 +1,5 @@
 import Class from "../models/Class.js";
+import Student from "../models/Student.js";
 import expressAsyncHandler from "express-async-handler";
 
 //! @desc Create Class
@@ -95,5 +96,50 @@ export const updateClass = expressAsyncHandler(async (req, res) => {
     status: "success",
     message: "Class updated successfully",
     updatedClass,
+  });
+});
+
+//! @desc Delete Class
+//! @route DELETE /api/classes/:id
+//! @access Private/Admin
+
+export const deleteClass = expressAsyncHandler(async (req, res) => {
+  // Find class by Name
+  const classs = await Class.findById(req.body.className.toLowerCase());
+
+  if (!classs) {
+    res.status(404);
+    throw new Error("Class not found");
+  }
+
+  // Delete class
+  await Class.findByIdAndDelete(classs._id);
+  res.json({
+    status: "success",
+    message: "Class deleted successfully",
+  });
+});
+
+//! @desc Get all Students in a Class
+//! @route GET /api/classes/students
+//! @access Private/Admin
+
+export const getClassStudents = expressAsyncHandler(async (req, res) => {
+  // Find class by Name
+  const classs = await Class.find({
+    className: req.body.className.toLowerCase(),
+  });
+
+  if (!classs) {
+    res.status(404);
+    throw new Error("Class not found");
+  }
+
+  const students = await Student.find({ class: classs._id });
+
+  res.json({
+    status: "success",
+    message: "Class found successfully",
+    students,
   });
 });

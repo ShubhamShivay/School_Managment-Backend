@@ -25,7 +25,7 @@ const classSchema = new Schema(
       type: String,
       default: "Teacher",
     },
-    School: {
+    school: {
       type: mongoose.Schema.Types.String,
       required: true,
       ref: "Admin",
@@ -34,14 +34,8 @@ const classSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "subject",
     },
-    teacherClass: {
-      type: Schema.Types.ObjectId,
-      ref: "Class",
-    },
-
     description: {
       type: String,
-      required: true,
     },
     image: {
       type: String,
