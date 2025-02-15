@@ -58,6 +58,11 @@ const studentSchema = new Schema(
           type: Number,
           default: 0,
         },
+        fullMarks: {
+          type: Number,
+          required: true,
+          default: 100,
+        },
       },
     ],
     attendance: [

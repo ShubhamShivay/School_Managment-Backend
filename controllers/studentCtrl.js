@@ -141,3 +141,131 @@ export const updateStudent = expressAsyncHandler(async (req, res) => {
     student: updatedStudent,
   });
 });
+
+//! @desc Update Exam Result
+//! @route PUT /api/students/update-exam-result:id
+//! @access Private/Admin
+
+export const updateExamResult = expressAsyncHandler(async (req, res) => {
+  const { subName, subCode, marksObtained, fullMarks } = req.body;
+  const updatedFields = {
+    subName,
+    subCode,
+    marksObtained,
+    fullMarks,
+  };
+  const { identifier } = req.params;
+
+  // Find Student using unique identifier
+  const student = await Student.findOne({
+    $or: [
+      { username: identifier },
+      { email: identifier },
+      { rollNumber: identifier },
+      { _id: identifier },
+    ],
+  });
+  if (!student) {
+    res.status(404);
+    throw new Error("Student not found");
+  }
+
+  // Check if subject already exists in exam result
+  const subjectExists = await student.examResult.findIndex(
+    (exam) => exam.subName === subName && exam.subCode === subCode
+  );
+
+  if (subjectExists !== -1) {
+    res.status(400);
+    throw new Error("Subject already exists in exam result");
+  }
+
+  // Update Exam Result
+  const updatedStudent = await Student.findByIdAndUpdate(
+    student._id,
+    { $push: { examResult: updatedFields } },
+    { new: true }
+  );
+  res.json({
+    status: "success",
+    message: "Exam result updated successfully",
+    student: updatedStudent,
+  });
+});
+
+//? @desc Update Exam Result's Wrong Entry in exam result
+//? @route PUT /api/students/update-exam-result/:identifier
+//? @access Private/Admin
+
+export const updateWrongEntry = expressAsyncHandler(async (req, res) => {
+  const { subName, subCode, marksObtained, fullMarks } = req.body;
+  const updatedFields = {
+    subName,
+    subCode,
+    marksObtained,
+    fullMarks,
+  };
+  const { identifier } = req.params;
+
+  // Find Student using unique identifier
+  const student = await Student.findOne({
+    $or: [
+      { username: identifier },
+      { email: identifier },
+      { rollNumber: identifier },
+      { _id: identifier },
+    ],
+  });
+  if (!student) {
+    res.status(404);
+    throw new Error("Student not found");
+  }
+
+  // Check if subject already exists in exam result
+  const subjectExists = student.examResult.findIndex(
+    (exam) => exam.subName === subName && exam.subCode === subCode
+  );
+
+  // If subject exists in exam result, update it
+  if (subjectExists !== -1) {
+    const updatedStudent = await Student.findByIdAndUpdate(
+      student._id,
+      { $set: { "examResult.$[index]": updatedFields } },
+      { new: true, arrayFilters: [{ "index.subName": subName }] }
+    );
+    res.json({
+      status: "success",
+      message: "Wrong entry updated successfully",
+      student: updatedStudent,
+    });
+  }
+});
+
+//? @desc Delete Student
+//? @route DELETE /api/students/:id
+//? @access Private/Admin
+
+export const deleteStudent = expressAsyncHandler(async (req, res) => {
+  const { identifier } = req.params;
+
+  // Find Student using unique identifier
+  const student = await Student.findOne({
+    $or: [
+      { username: identifier },
+      { email: identifier },
+      { rollNumber: identifier },
+      { _id: identifier },
+    ],
+  });
+  if (!student) {
+    res.status(404);
+    throw new Error("Student not found");
+  }
+
+  // Delete Student
+  await Student.findByIdAndDelete(student._id);
+  res.json({
+    status: "success",
+    message: "Student deleted successfully",
+  });
+});
