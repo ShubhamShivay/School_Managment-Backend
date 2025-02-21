@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import connectDB from "../config/dbConnect.js";
 import {
   globalErrorHandler,
@@ -16,6 +17,9 @@ const app = express();
 
 connectDB();
 
+//! CORS
+app.use(cors());
+
 //! Pass incoming data to JSON
 app.use(express.json()); // Middleware to parse incoming JSON data
 
@@ -28,7 +32,7 @@ app.use("/api/subjects", subRoute);
 app.use("/api/teachers", teacherRoute);
 
 //! Error handler
-app.use(notFound);
 app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;

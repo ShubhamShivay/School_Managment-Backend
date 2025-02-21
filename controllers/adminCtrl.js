@@ -50,16 +50,21 @@ export const adminRegistration = expressAsyncHandler(async (req, res) => {
 //! @route GET /api/admins/login
 //! @access Private/Admin
 
-export const adminLogin = expressAsyncHandler(async (req, res) => {
+export const adminLogin = expressAsyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const admin = await Admin.findOne({ email: email.toLowerCase() });
 
   if (!admin) {
-    res.status(401);
-    throw new Error("Invalid email or password");
+    return next({
+      statusCode: 401,
+      message: "Invalid email or password",
+    });
   }
 
+  console.log(admin);
+
+  //   Check if password is correct
   const isPasswordMatch = await bcrypt.compare(password, admin.password);
 
   if (!isPasswordMatch) {
