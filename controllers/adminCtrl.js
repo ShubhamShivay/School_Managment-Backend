@@ -1,10 +1,10 @@
 import Admin from "../models/Admin.js";
 import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
-import Class from "../models/Class.js";
 import Teacher from "../models/Teacher.js";
 import Subject from "../models/Subject.js";
 import Student from "../models/Student.js";
+import Class from "../models/Class.js";
 import generateToken from "../utils/generateToken.js";
 
 //corrected documentations , note to fix other places to
@@ -91,9 +91,9 @@ export const adminLogin = expressAsyncHandler(async (req, res, next) => {
   });
 });
 
-//? @desc Get Admin
-//? @route GET /api/admins/profile
-//? @access Private/Admin
+//! @desc Get Admin
+//! @route GET /api/admins/profile
+//! @access Private/Admin
 
 export const getAdmin = expressAsyncHandler(async (req, res) => {
   const admin = await Admin.findById(req.user?._id);
@@ -116,9 +116,28 @@ export const getAdmin = expressAsyncHandler(async (req, res) => {
   });
 });
 
-//? @desc Update Admin
-//? @route PUT /api/admins/:id
-//? @access Private/Admin
+//! @desc Get All Teachers
+//! @route GET /api/admins/teachers
+//! @access Private/Admin
+
+export const getAllTeachers = expressAsyncHandler(async (req, res) => {
+  const teachers = await Teacher.find();
+
+  if (!teachers || teachers === null || teachers.length === 0) {
+    res.status(404);
+    throw new Error("Teacher not found");
+  }
+
+  res.json({
+    status: "success",
+    message: "Teachers found successfully",
+    teachers,
+  });
+});
+
+//! @desc Update Admin
+//! @route PUT /api/admins/:id
+//! @access Private/Admin
 
 export const updateAdmin = expressAsyncHandler(async (req, res) => {
   const updatedAdmin = await Admin.findByIdAndUpdate(req.user?._id, req.body, {
@@ -132,9 +151,63 @@ export const updateAdmin = expressAsyncHandler(async (req, res) => {
   });
 });
 
-//? @desc Delete Admin
-//? @route DELETE /api/admins/:id
-//? @access Private/Admin
+//! @desc Get All Students
+//! @route GET /api/admins/students
+//! @access Private/Admin
+
+export const getAllStudents = expressAsyncHandler(async (req, res) => {
+  const students = await Student.find();
+
+  if (!students || students === null || students.length === 0) {
+    res.status(404);
+    throw new Error("Student not found");
+  }
+
+  res.json({
+    status: "success",
+    message: "Students found successfully",
+    students,
+  });
+});
+
+//! @desc Get All Classes
+//! @route GET /api/admins/classes
+//! @access Private/Admin
+
+export const getAllClasses = expressAsyncHandler(async (req, res) => {
+  const classes = await Class.find();
+
+  if (!classes || classes === null || classes.length === 0) {
+    res.status(404);
+    throw new Error("Class not found");
+  }
+
+  res.json({
+    status: "success",
+    message: "Classes found successfully",
+    classes,
+  });
+});
+
+//! @desc Logout Admin
+//! @route GET /api/admins/logout
+//! @access Private/Admin
+
+export const adminLogout = expressAsyncHandler(async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.json({
+    status: "success",
+    message: "User logged out successfully",
+  });
+});
+
+//! @desc Delete Admin
+//! @route DELETE /api/admins/:id
+//! @access Private/Admin
 
 export const deleteAdmin = expressAsyncHandler(async (req, res) => {
   const admin = await Admin.findById(req.userAuthId?._id);
@@ -149,21 +222,5 @@ export const deleteAdmin = expressAsyncHandler(async (req, res) => {
   res.json({
     status: "success",
     message: "Admin deleted successfully",
-  });
-});
-
-//? @desc Logout Admin
-//? @route GET /api/admins/logout
-//? @access Private/Admin
-
-export const adminLogout = expressAsyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-
-  res.json({
-    status: "success",
-    message: "User logged out successfully",
   });
 });

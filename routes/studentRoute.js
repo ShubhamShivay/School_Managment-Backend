@@ -14,7 +14,6 @@ const studentRoute = express.Router();
 
 studentRoute.post("/register", isLoggedIn, isAdmin, studentRegistration);
 studentRoute.post("/login", studentLogin);
-studentRoute.get("/all", isLoggedIn, isAdmin, getAllStudents);
 studentRoute.put("/update-by-admin", isLoggedIn, isAdmin, updateStudent);
 studentRoute.put(
   "/update-exam-result/:identifier",
