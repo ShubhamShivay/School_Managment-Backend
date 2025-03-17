@@ -116,6 +116,22 @@ export const getAdmin = expressAsyncHandler(async (req, res) => {
   });
 });
 
+//! @desc Update Admin
+//! @route PUT /api/admins/:id
+//! @access Private/Admin
+
+export const updateAdmin = expressAsyncHandler(async (req, res) => {
+  const updatedAdmin = await Admin.findByIdAndUpdate(req.user?._id, req.body, {
+    new: true,
+  });
+
+  res.json({
+    status: "success",
+    message: "Admin updated successfully",
+    updatedAdmin,
+  });
+});
+
 //! @desc Get All Teachers
 //! @route GET /api/admins/teachers
 //! @access Private/Admin
@@ -135,19 +151,28 @@ export const getAllTeachers = expressAsyncHandler(async (req, res) => {
   });
 });
 
-//! @desc Update Admin
-//! @route PUT /api/admins/:id
+//! @desc Add Teacher
+//! @route POST /api/admins/teachers
 //! @access Private/Admin
 
-export const updateAdmin = expressAsyncHandler(async (req, res) => {
-  const updatedAdmin = await Admin.findByIdAndUpdate(req.user?._id, req.body, {
-    new: true,
+export const addTeacher = expressAsyncHandler(async (req, res) => {
+  const { fname, lname, email, password, school } = req.body;
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const teacher = await Teacher.create({
+    fname: fname.toLowerCase(),
+    lname: lname.toLowerCase(),
+    email: email.toLowerCase(),
+    password: hashedPassword,
+    school: school.toLowerCase(),
   });
 
   res.json({
     status: "success",
-    message: "Admin updated successfully",
-    updatedAdmin,
+    message: "Teacher created successfully",
+    teacher,
   });
 });
 
@@ -167,6 +192,50 @@ export const getAllStudents = expressAsyncHandler(async (req, res) => {
     status: "success",
     message: "Students found successfully",
     students,
+  });
+});
+
+//! @desc Add Student
+//! @route POST /api/admins/students
+//! @access Private/Admin
+
+export const addStudent = expressAsyncHandler(async (req, res) => {
+  const { fname, lname, email, password, school } = req.body;
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const student = await Student.create({
+    fname: fname.toLowerCase(),
+    lname: lname.toLowerCase(),
+    email: email.toLowerCase(),
+    password: hashedPassword,
+    school: school.toLowerCase(),
+  });
+  res.json({
+    status: "success",
+    message: "Student created successfully",
+    student,
+  });
+});
+
+//! @desc Update Student
+//! @route PUT /api/admins/students/:id
+//! @access Private/Admin
+
+export const updateStudent = expressAsyncHandler(async (req, res) => {
+  const updatedStudent = await Student.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  res.json({
+    status: "success",
+    message: "Student updated successfully",
+    updatedStudent,
   });
 });
 
